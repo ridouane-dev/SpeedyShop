@@ -1,0 +1,106 @@
+
+{% load static  %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedyShop - Livraison Rapide</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url("{% static 'images/pexel.jpg' %}") no-repeat center center/cover;
+        }
+        .container {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .card {
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .card-normal {
+            background-color: #f8d210; /* Jaune SpeedyShop */
+            color: #000;
+        }
+        .card-express {
+            background-color: #ff5733; /* Rouge vif pour express */
+            color: #fff;
+        }
+        .social-buttons a {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="logo.png" alt="SpeedyShop Logo" width="150">
+        <h1 class="mt-3">Bienvenue sur SpeedyShop</h1>
+        <h3>SpeedyShop est votre supermarché en ligne avec une livraison rapide et efficace.
+           Choisissez entre notre livraison normale et express selon vos besoins ! </h3>
+        <p>Faites vos courses facilement et recevez vos produits en un temps record.</p>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card card-normal">
+                    <h3>Livraison Normale</h3>
+                    <p>Livraison en 24 heures</p>
+                    <p><strong>Prix : 1000 FCFA</strong></p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-express">
+                    <h3>Livraison Express</h3>
+                    <p>Livraison en 2:30 minutes max </p>
+                    <p><strong>Prix : 2000 FCFA</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <a href="supermarche.html" class="btn btn-primary mt-4">Accéder au Supermarché</a>
+        
+        <div class="social-buttons mt-4">
+            <a href="https://wa.me/123456789" class="btn btn-success">WhatsApp</a>
+            <a href="https://facebook.com/speedyshop" class="btn btn-primary">Facebook</a>
+            <a href="https://instagram.com/speedyshop" class="btn btn-danger">Instagram</a>
+        </div>
+    </div>
+    <!-- Messages Section -->
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-info" role="alert">
+            <strong>{{ message }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <h1>Bienvenue sur SpeedyShop</h1>
+            <p>Votre destination pour un shopping rapide et efficace !</p>
+
+            {% if user.is_authenticated %}
+            <h3 class="mt-4">Bonjour {{ firstname }} ravi de vous revoir !</h3>
+            <div class="hero-buttons">
+                <a href="logout" class="btn btn-danger">Se déconnecter</a>
+            </div>
+            {% else %}
+            <div class="hero-buttons">
+                <a href="register" class="btn btn-primary">S'inscrire</a>
+                <a href="login" class="btn btn-success">Se connecter</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <p>&copy; 2025 SpeedyShop. Tous droits réservés.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

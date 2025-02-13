@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedyShop - Inscription</title>
+    <style>
+        /* Import Google font - Poppins */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url("{% static 'images/mm.jpg' %}") no-repeat center center/cover;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        .logo {
+            width: 80px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #009579;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 10px;
+            color: #009579;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+            margin-top: 5px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #009579;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #fff;
+            background: #009579;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #007d63;
+        }
+
+        .link {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .link a {
+            color: #009579;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            background: red;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            .logo {
+                width: 60px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .description {
+                font-size: 12px;
+            }
+
+            input, button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Logo de SpeedyShop -->
+        <img src="{% static 'images/speedylogo.jpg' %}" alt="SpeedyShop Logo" class="logo">
+
+        <!-- Présentation de l'application -->
+        <h1>Bienvenue sur SpeedyShop</h1>
+        <p class="description">SpeedyShop vous permet de faire vos achats rapidement et en toute simplicité, où que vous soyez.</p>
+
+        <!-- Affichage des messages d'erreur -->
+        {% if messages %}
+        <div class="error">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Formulaire d'inscription -->
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <label for="username">Numéro de téléphone</label>
+            <input type="text" id="username" name="username" placeholder="Ex: 07 00 00 00 00" required>
+
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" placeholder="********" required>
+
+            <button type="submit">Se connecter</button>
+        </form>
+
+        <!-- Lien vers la connexion -->
+        <p class="link">Vous n'avez pas compte ? <a href="{% url 'register' %}">S'inscrire</a></p>
+    </div>
+
+</body>
+</html>

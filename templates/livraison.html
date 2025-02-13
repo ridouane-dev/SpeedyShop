@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeedyShop - Livraison Rapide</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url("{% static 'images/pexel.jpg' %}") no-repeat center center/cover;
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .card {
+            border-radius: 15px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card-normal {
+            background-color: #f8d210; /* Jaune SpeedyShop */
+            color: #000;
+        }
+        .card-express {
+            background-color: #ff5733; /* Rouge vif pour express */
+            color: #fff;
+        }
+        .social-buttons a {
+            margin: 5px;
+        }
+        .hero {
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            text-align: center;
+            margin-top: 50px;
+            border-radius: 10px;
+        }
+        .video-container {
+    text-align: center;
+    margin-top: 20px;
+    border: 2px solid #f8d210; /* Jaune SpeedyShop */
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #fff;
+}
+video {
+    border-radius: 10px;
+}
+.btn-supermarche {
+    display: inline-block;
+    background: linear-gradient(45deg, #ff5733, #f8d210); /* Dégradé rouge -> jaune */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-supermarche:hover {
+    background: linear-gradient(45deg, #f8d210, #ff5733); /* Inversion du dégradé */
+    transform: scale(1.1);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.social-buttons img {
+    width: 40px;
+    margin: 5px;
+}
+
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #222;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+       
+        <div class="messages container mt-4">
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">
+                <strong>{{ message }}</strong>
+            </div>
+            {% endfor %}
+        </div>
+    
+        <div class="hero container">
+            <img src="{% static 'images/speedylogo.jpg' %}" alt="SpeedyShop Logo" width="150">
+            <h1>Bienvenue sur SpeedyShop</h1>
+            <p>Votre destination pour un shopping rapide et efficace !</p>
+           
+        </div>
+        <div class="container mt-4">
+            <h2>Comment utiliser l'application</h2>
+            <div class="video-container">
+                <video width="100%" height="400" controls>
+                    <source src="{% static 'videos/tutoriel.mp4' %}" type="video/mp4">
+                    Votre navigateur ne supporte pas la lecture de vidéos.
+                </video>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card card-normal">
+                    <h3>Livraison Normale</h3>
+                    <p>Livraison en 24 heures</p>
+                    <p><strong>Prix : 1000 FCFA</strong></p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-express">
+                    <h3>Livraison Express</h3>
+                    <p>Livraison en 2 heures maximum</p>
+                    <p><strong>Prix : 2000 FCFA</strong></p>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'homeB' %}" class="btn btn-supermarche mt-4">
+            🛒 Accéder au Supermarché
+        </a>
+        
+        
+         
+        <h4>Suivez-nous</h4>
+            <div class="social-buttons">
+                <a href="https://wa.me/123456789"><img src="{% static 'images/wahtsapp.jpg' %}" alt="WhatsApp"></a>
+                <a href="https://facebook.com/speedyshop"><img src="{% static 'images/facebook.jpg' %}" alt="Facebook"></a>
+                <a href="https://instagram.com/speedyshop"><img src="{% static 'images/insta.jpg' %}" alt="Instagram"></a>
+            </div>
+    </div>
+
+{% if user.is_authenticated %}
+
+<a href="logout" class="btn btn-danger">Se déconnecter</a>
+{% else %}
+<a href="register" class="btn btn-primary">S'inscrire</a>
+<a href="login" class="btn btn-success">Se connecter</a>
+
+{% endif %}
+
+    <footer class="text-center">
+        <p>&copy; 2025 SpeedyShop. Tous droits réservés.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+</body>
+</html>

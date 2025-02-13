@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeegyShop - SuperMarché en ligne</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* Arrière-plan thématique pour un effet supermarché */
+        body {
+            background: url("{% static 'images/sup4.jpg' %}") no-repeat center center/cover;
+            background-attachment: fixed;
+        }
+
+        /* Style de la barre de recherche */
+        .search-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control {
+            border-radius: 50px;
+            padding: 12px;
+        }
+
+        .btn-success {
+            border-radius: 50px;
+            padding: 10px 20px;
+        }
+
+        /* Style des cartes produits */
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            background: #fff;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            text-align: center;
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .card-text {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Responsivité */
+        @media (max-width: 768px) {
+            .col-md-3 {
+                width: 50%;
+            }
+
+            .card img {
+                height: 140px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .col-md-3 {
+                width: 100%;
+            }
+
+            .card {
+                margin-bottom: 15px;
+            }
+
+            .card img {
+                height: 120px;
+            }
+        }
+
+        /* Applique un effet de flou sur le fond de la navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px); /* Effet de flou */
+        }
+        
+        /* Style général pour éviter qu'elle prenne trop de place */
+.search-container {
+    max-width: 600px; /* Empêche la barre d’être trop large sur les grands écrans */
+    margin: 0 auto; /* Centre la barre */
+    padding: 5px; /* Réduit l’espace intérieur */
+}
+
+/* Ajustements pour les petits écrans */
+@media (max-width: 576px) {
+    .search-container {
+        max-width: 100%; /* Utilise toute la largeur sur mobile */
+        padding: 3px; /* Réduit encore l’espace */
+    }
+
+    .form-control {
+        font-size: 14px; /* Réduit la taille du texte */
+        padding: 6px; /* Diminue l'espace intérieur */
+    }
+
+    .btn-success {
+        font-size: 14px; /* Diminue la taille du bouton */
+        padding: 6px 10px; /* Ajuste le padding pour le rendre plus compact */
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar w-full p-4 shadow-md fixed top-0 left-0">
+        <div class="container mx-auto flex justify-between items-center">
+            <a class="flex items-center space-x-3" href="boutique">
+                <img src="{% static 'images/speedylogo.jpg' %}" alt="Logo SpeedyShop" class="h-10">
+                <span class="text-xl font-bold text-orange-600">Super Marché - SpeedyShop</span>
+            </a>
+            <ul class="flex space-x-6">
+                <li><a class="text-gray-700 hover:text-orange-600" href="{% url 'home' %}">Accueil</a></li>
+                <li><a class="text-gray-700 hover:text-orange-600" href="boutique">Produits</a></li>
+                <li>
+                    <button id="panier" type="button" class="btn btn-outline-secondary ms-3"
+                    data-html="true" data-container="body" data-toggle="popover" data-placement="bottom"
+                    data-content="Votre panier est vide.">
+                    🛒 Panier (0)
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+                    {% block content %} 
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    {% block js %} 
+    {% endblock %}
+
+</body>
+
+</html>
+
+
+

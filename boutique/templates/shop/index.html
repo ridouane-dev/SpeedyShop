@@ -1,0 +1,99 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="search-container card card-sm">
+                <div class="card-body row no-gutters align-items-center">
+                    <div class="col">
+                        <input type="search" placeholder="Fruits, légumes, charcuterie ..." name="item-name"
+                            class="form-control form-control-borderless">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-success">🔍 Rechercher</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        {% for product in Product_object %}
+        <div class="col-6 col-md-3 col-sm-6 mb-4">
+            <div class="card">
+                <img src="{{ product.get_image_url }}" alt="" class="card-img-top">
+                <div class="card-body">
+                    <div id="aa{{ product.id }}" class="card-description">{{ product.description }}</div>
+                    <div id="price{{ product.id }}" class="card-text" style="color: orange;">{{ product.price }} FCFA</div>
+                    <button id="{{ product.id }}" class="btn btn-success mt-2">🛒 Ajouter</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+     
+{% endblock %}
+{% block js %} 
+<script type="text/javascript">
+    console.log('just pour tester nnnnnnn');
+    if(localStorage.getItem('panier') == null){
+        var panier = {};
+    } else {
+        panier = JSON.parse(localStorage.getItem('panier'));
+    }
+
+    // Lorsque tu cliques sur "Ajouter", on ajoute l'article au panier
+    $(document).on('click', '.btn-success', function() {
+        var item_id = this.id.toString();
+        console.log('Produit ajouté: ' + item_id);
+
+        if(panier[item_id] != undefined){
+            var quantite = panier[item_id][0] + 1;
+            panier[item_id][0] = quantite;
+            panier[item_id][2] += parseFloat(document.getElementById("price"+item_id).innerHTML);
+        } else {
+            var quantite = 1;
+            var prix = parseFloat(document.getElementById("price"+item_id).innerHTML);
+            var nom = document.getElementById("aa"+ item_id).innerHTML;
+            panier[item_id] = [quantite, nom, prix];
+        }
+
+        console.log(panier);
+        localStorage.setItem('panier', JSON.stringify(panier));
+
+        // Mettre à jour le nombre d'articles dans le panier
+        var panierLength = Object.keys(panier).length;
+        console.log('Panier contient ' + panierLength + ' articles');
+        if(document.getElementById('panier')) {
+            document.getElementById('panier').innerHTML = 'Panier (' + panierLength + ')';
+        }
+
+        AfficherList(panier);
+    });
+
+    // Fonction pour afficher les éléments du panier dans le popover
+    function AfficherList(panier) {
+        var panierString = "<h5>Voici votre liste</h5>";
+        var index = 1;
+
+        for (var x in panier){
+            panierString += index + ') ' + document.getElementById("aa" + x).innerHTML + " Qte: " + panier[x][0] + '</br>';
+            index++;
+        }
+
+        panierString += "<a href='boutiquecheckout' class='btn btn-primary'>Checkout</a>";
+        $('[data-toggle="popover"]').popover('dispose'); // Détruire le popover précédent avant de le réinitialiser
+        document.getElementById('panier').setAttribute('data-content', panierString); 
+        $('[data-toggle="popover"]').popover(); // Afficher le popover
+    }
+
+    // Afficher les produits du panier au démarrage
+    AfficherList(panier);
+</script>
+{% endblock %}

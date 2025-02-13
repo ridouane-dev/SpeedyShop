@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container my-5">
+        <h1 class="text-center">Ajouter un Livreur</h1>
+        <form action="{% url 'save_livreur' %}" method="POST" enctype="multipart/form-data" class="mt-4">
+            {% csrf_token %}
+            
+           
+            
+            <!-- Nom -->
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom du Livreur</label>
+                <input type="text" id="nom" name="nom" class="form-control" placeholder="Nom du livreur" required>
+            </div>
+
+            <!-- Photo -->
+            <div class="mb-3">
+                <label for="photo" class="form-label">Photo de profil</label>
+                <input type="file" id="photo" name="photo" class="form-control">
+            </div>
+
+            <!-- Numéro de téléphone -->
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Numéro de téléphone</label>
+                <input type="text" id="phone_number" name="phone_number" class="form-control" placeholder="Ex : +33 6 12 34 56 78" required>
+            </div>
+
+            <!-- Adresse -->
+            <div class="mb-3">
+                <label for="address" class="form-label">Adresse</label>
+                <textarea id="address" name="address" class="form-control" rows="3" placeholder="Adresse complète du livreur" required></textarea>
+            </div>
+
+            <!-- Statut Actif -->
+            <div class="mb-3">
+                <label for="is_active" class="form-check-label">Statut Actif</label>
+                <input type="checkbox" id="is_active" name="is_active" class="form-check-input">
+            </div>
+
+            <!-- Bouton de soumission -->
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

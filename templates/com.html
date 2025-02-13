@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Commandes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: scale(1.02);
+        }
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn-whatsapp:hover {
+            background-color: #1EBE5D;
+            color: white;
+        }
+    </style>
+</head>
+{% block content %}
+<body>
+    <div class="container">
+        <h2 class="text-center">📦 Liste des Commandes</h2>
+        
+        {% for comm in com %}
+        <div class="card">
+            <h4>Commande de {{ comm.user.first_name }}</h4>
+            <p><strong> Telephone :</strong> {{ comm.user.username }}</p>
+            <p><strong>Articles :</strong> {{ comm.items }}</p>
+            <p><strong>Total :</strong> {{ comm.total }} FCFA</p>
+            <p><strong>status :</strong> livraison {{ comm.status }} </p>
+            <p><strong>Date :</strong> {{ comm.date_commande|date:"d M Y H:i" }}</p>
+            {% if comm.adresse %}
+                <p><strong>Adresse :</strong> {{ comm.adresse }}</p>
+            {% endif %}
+            
+            {% if comm.latitude and comm.longitude %}
+                <a href="https://wa.me/?text=📍 Localisation de la commande : https://www.google.com/maps?q={{ comm.latitude }},{{ comm.longitude }}" 
+                   class="btn btn-whatsapp" target="_blank">
+                    📍 Partager Localisation
+                </a>
+            {% else %}
+                <p class="text-muted">Localisation non disponible</p>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p class="text-center">Aucune commande trouvée.</p>
+        <pre>{{ comm|safe }}</pre>
+        {% endfor %}
+    </div>
+   
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+{% endblock %}
+</html>

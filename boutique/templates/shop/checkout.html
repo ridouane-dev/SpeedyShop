@@ -1,0 +1,221 @@
+{% extends "shop/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Title Section -->
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <h2>Voici votre liste de produits</h2>
+            <h3>Veuillez saisir la quantité</h3>
+        </div>
+    </div>
+
+    <!-- Product List Section -->
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow-lg p-3">
+                <div class="card-body">
+                    <ul class="list-group" id="item-list">
+                        <!-- Les produits seront listés ici -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Form Section -->
+    <div class="row mt-4">
+        <div class="col-md-8 mx-auto">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" id="items" name="items">
+
+                <!-- Total Price Input -->
+                <div class="form-group">
+                    <label for="total" class="font-weight-bold">Somme totale à payer</label>
+                    <input name="total" id="total" type="text" class="form-control bg-dark text-warning" readonly>
+                </div>
+
+                <!-- Delivery Status -->
+                <div class="mb-3">
+                    <label for="status" class="form-label">Choisissez le type de livraison</label>
+                    <select id="status" name="status" class="form-select">
+                        <option value="En Attente">Normale</option>
+                        <option value="En Cours">Express</option>
+                    </select>
+                </div>
+
+                <!-- Address Input with Location Button -->
+                <div class="form-group">
+                    <label for="adresse" class="font-weight-bold">Votre localisation</label>
+                    <div class="input-group">
+                        <input type="text" id="adresse" name="adresse" class="form-control" placeholder="Votre adresse" readonly>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary" onclick="getLocation()">Localiser</button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center"> 
+                    <button id="commander" type="submit" class="btn btn-primary btn-lg mt-3">Commander</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %} 
+
+<script type="text/javascript">
+  // Initialiser le panier à partir du localStorage ou en tant qu'objet vide
+  let panier = localStorage.getItem('panier') ? JSON.parse(localStorage.getItem('panier')) : {};
+
+  // Fonction pour mettre à jour l'affichage du panier
+  function afficherPanier() {
+      $('#item-list').empty(); // Vider la liste existante pour éviter la duplication
+
+      // Initialiser les variables pour le calcul du total
+      let x = 1;
+      let total = 0;
+      let nombre = 0;
+
+      // Parcourir chaque article dans le panier
+      for (let item in panier) {
+          let nom = panier[item][1]; // Nom de l'article
+          let quantite = panier[item][0]; // Quantité de l'article
+          let prix = panier[item][2]; // Prix de l'article
+          nombre += quantite;
+          total += prix * quantite; // Multiplier le prix par la quantité
+          
+          // Créer un élément HTML pour l'article avec un champ de saisie pour la quantité
+          let itemString = `
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  (${x})  ${nom} 
+                  <span class="badge badge-warning badge-pill">${prix} FCFA</span>   
+                  <input type="number" min="1" value="${quantite}" class="form-control quantity-input" data-item-id="${item}" style="width: 80px; margin-left: 10px;">
+              </li>`;
+          
+          // Ajouter l'élément à la liste
+          $('#item-list').append(itemString);
+          x += 1;
+      }
+      $('#items').val(JSON.stringify(panier));
+
+      // Afficher le prix et la quantité totaux
+      let itemNombre = `
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+              <b class="bg-danger">PRIX ET QUANTITÉ TOTAUX</b>
+              <span class="badge badge-danger badge-pill">${total} FCFA</span>   
+              <span class="badge badge-primary badge-pill">Total Qte: ${nombre}</span>
+          </li>`;
+      $('#item-list').append(itemNombre);
+      $('#total').val(total + " FCFA");
+
+      // Ajouter des écouteurs d'événements pour les champs de saisie de quantité
+      $('.quantity-input').on('change', function () {
+          let itemId = $(this).data('item-id'); // Obtenir l'identifiant de l'article
+          let nouvelleQuantite = parseInt($(this).val()); // Obtenir la nouvelle quantité entrée par l'utilisateur
+
+          // Mettre à jour la quantité dans le panier
+          panier[itemId][0] = nouvelleQuantite;
+
+          // Enregistrer le panier mis à jour dans le localStorage
+          localStorage.setItem('panier', JSON.stringify(panier));
+
+          // Réafficher le panier pour mettre à jour le prix total et la quantité
+          afficherPanier();
+      });
+  }
+
+  // Afficher le panier au chargement de la page
+  afficherPanier();
+
+  // Ajouter un gestionnaire d'événements pour le bouton "Commander"
+  $('#commander').on('click', function() {
+      // Vider le localStorage
+      localStorage.removeItem('panier'); // Supprimer uniquement le panier du localStorage
+
+      // Réinitialiser le panier et réafficher
+      panier = {}; // Réinitialiser le panier local à un objet vide
+    
+
+      
+  });
+  function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError, {
+            enableHighAccuracy: true, // Améliore la précision
+            timeout: 10000, // Délai max pour obtenir la position
+            maximumAge: 0 // Ne pas utiliser une position mise en cache
+        });
+    } else {
+        alert("La géolocalisation n'est pas supportée par ce navigateur.");
+    }
+}
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            alert("La géolocalisation n'est pas supportée par ce navigateur.");
+        }
+    
+        function showPosition(position) {
+    let latitude = position.coords.latitude.toFixed(6);
+    let longitude = position.coords.longitude.toFixed(6);
+
+    // Forcer l'utilisation du point au lieu de la virgule
+    latitude = latitude.toString().replace(',', '.');
+    longitude = longitude.toString().replace(',', '.');
+
+    document.getElementById("latitude").value = latitude;
+    document.getElementById("longitude").value = longitude;
+
+    let mapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    console.log("URL Google Maps :", mapsUrl);
+
+    getAddress(latitude, longitude);
+}
+
+
+
+
+    function showError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                alert("Vous avez refusé la demande de géolocalisation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Les informations de localisation ne sont pas disponibles.");
+                break;
+            case error.TIMEOUT:
+                alert("La demande de localisation a expiré.");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("Une erreur inconnue s'est produite.");
+                break;
+        }
+    }
+
+    function getAddress(lat, lng) {
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // Vérifie ce qui est retourné par l'API
+        if (data.display_name) {
+            document.getElementById("adresse").value = data.display_name;
+        } else {
+            alert("Impossible de récupérer l'adresse.");
+        }
+    })
+    .catch(error => console.log("Erreur lors de la récupération de l'adresse : ", error));
+}
+
+</script>
+  
+
+
+
+{% endblock %}
