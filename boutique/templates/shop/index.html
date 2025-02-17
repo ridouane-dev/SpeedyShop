@@ -1,9 +1,165 @@
-{% extends "shop/base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
 
-{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeegyShop - SuperMarché en ligne</title>
 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Custom Styles -->
+    <style>
+        /* Arrière-plan thématique pour un effet supermarché */
+        body {
+            background: url("{% static 'images/sup4.jpg' %}") no-repeat center center/cover;
+            background-attachment: fixed;
+        }
+
+        /* Style de la barre de recherche */
+        .search-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control {
+            border-radius: 50px;
+            padding: 12px;
+        }
+
+        .btn-success {
+            border-radius: 50px;
+            padding: 10px 20px;
+        }
+
+        /* Style des cartes produits */
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            background: #fff;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            text-align: center;
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .card-text {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Responsivité */
+        @media (max-width: 768px) {
+            .col-md-3 {
+                width: 50%;
+            }
+
+            .card img {
+                height: 140px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .col-md-3 {
+                width: 100%;
+            }
+
+            .card {
+                margin-bottom: 15px;
+            }
+
+            .card img {
+                height: 120px;
+            }
+        }
+
+        /* Applique un effet de flou sur le fond de la navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px); /* Effet de flou */
+        }
+        
+        /* Style général pour éviter qu'elle prenne trop de place */
+.search-container {
+    max-width: 600px; /* Empêche la barre d’être trop large sur les grands écrans */
+    margin: 0 auto; /* Centre la barre */
+    padding: 5px; /* Réduit l’espace intérieur */
+}
+
+/* Ajustements pour les petits écrans */
+@media (max-width: 576px) {
+    .search-container {
+        max-width: 100%; /* Utilise toute la largeur sur mobile */
+        padding: 3px; /* Réduit encore l’espace */
+    }
+
+    .form-control {
+        font-size: 14px; /* Réduit la taille du texte */
+        padding: 6px; /* Diminue l'espace intérieur */
+    }
+
+    .btn-success {
+        font-size: 14px; /* Diminue la taille du bouton */
+        padding: 6px 10px; /* Ajuste le padding pour le rendre plus compact */
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar w-full p-4 shadow-md fixed top-0 left-0">
+        <div class="container mx-auto flex justify-between items-center">
+            <ul class="flex space-x-6">
+                <li><a class="text-gray-700 hover:text-orange-600" href="{% url 'home' %}">Accueil</a></li>
+                <li><a class="text-gray-700 hover:text-orange-600" href="boutique">Produits</a></li>
+                <li>
+                    <button id="panier" type="button" class="btn btn-outline-secondary ms-3"
+                    data-html="true" data-container="body" data-toggle="popover" data-placement="bottom"
+                    data-content="Votre panier est vide.">
+                    🛒 Panier (0)
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+              
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -36,64 +192,69 @@
         {% endfor %}
     </div>
 </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-     
-{% endblock %}
-{% block js %} 
-<script type="text/javascript">
-    console.log('just pour tester nnnnnnn');
-    if(localStorage.getItem('panier') == null){
-        var panier = {};
-    } else {
-        panier = JSON.parse(localStorage.getItem('panier'));
-    }
-
-    // Lorsque tu cliques sur "Ajouter", on ajoute l'article au panier
-    $(document).on('click', '.btn-success', function() {
-        var item_id = this.id.toString();
-        console.log('Produit ajouté: ' + item_id);
-
-        if(panier[item_id] != undefined){
-            var quantite = panier[item_id][0] + 1;
-            panier[item_id][0] = quantite;
-            panier[item_id][2] += parseFloat(document.getElementById("price"+item_id).innerHTML);
+    <!-- Optional JavaScript -->
+    <script type="text/javascript">
+        console.log('just pour tester nnnnnnn');
+        if(localStorage.getItem('panier') == null){
+            var panier = {};
         } else {
-            var quantite = 1;
-            var prix = parseFloat(document.getElementById("price"+item_id).innerHTML);
-            var nom = document.getElementById("aa"+ item_id).innerHTML;
-            panier[item_id] = [quantite, nom, prix];
+            panier = JSON.parse(localStorage.getItem('panier'));
         }
-
-        console.log(panier);
-        localStorage.setItem('panier', JSON.stringify(panier));
-
-        // Mettre à jour le nombre d'articles dans le panier
-        var panierLength = Object.keys(panier).length;
-        console.log('Panier contient ' + panierLength + ' articles');
-        if(document.getElementById('panier')) {
-            document.getElementById('panier').innerHTML = 'Panier (' + panierLength + ')';
+    
+        // Lorsque tu cliques sur "Ajouter", on ajoute l'article au panier
+        $(document).on('click', '.btn-success', function() {
+            var item_id = this.id.toString();
+            console.log('Produit ajouté: ' + item_id);
+    
+            if(panier[item_id] != undefined){
+                var quantite = panier[item_id][0] + 1;
+                panier[item_id][0] = quantite;
+                panier[item_id][2] += parseFloat(document.getElementById("price"+item_id).innerHTML);
+            } else {
+                var quantite = 1;
+                var prix = parseFloat(document.getElementById("price"+item_id).innerHTML);
+                var nom = document.getElementById("aa"+ item_id).innerHTML;
+                panier[item_id] = [quantite, nom, prix];
+            }
+    
+            console.log(panier);
+            localStorage.setItem('panier', JSON.stringify(panier));
+    
+            // Mettre à jour le nombre d'articles dans le panier
+            var panierLength = Object.keys(panier).length;
+            console.log('Panier contient ' + panierLength + ' articles');
+            if(document.getElementById('panier')) {
+                document.getElementById('panier').innerHTML = 'Panier (' + panierLength + ')';
+            }
+    
+            AfficherList(panier);
+        });
+    
+        // Fonction pour afficher les éléments du panier dans le popover
+        function AfficherList(panier) {
+            var panierString = "<h5>Voici votre liste</h5>";
+            var index = 1;
+    
+            for (var x in panier){
+                panierString += index + ') ' + document.getElementById("aa" + x).innerHTML + " Qte: " + panier[x][0] + '</br>';
+                index++;
+            }
+    
+            panierString += "<a href='boutiquecheckout' class='btn btn-primary'>Checkout</a>";
+            $('[data-toggle="popover"]').popover('dispose'); // Détruire le popover précédent avant de le réinitialiser
+            document.getElementById('panier').setAttribute('data-content', panierString); 
+            $('[data-toggle="popover"]').popover(); // Afficher le popover
         }
-
+    
+        // Afficher les produits du panier au démarrage
         AfficherList(panier);
-    });
+    </script>
 
-    // Fonction pour afficher les éléments du panier dans le popover
-    function AfficherList(panier) {
-        var panierString = "<h5>Voici votre liste</h5>";
-        var index = 1;
+</body>
 
-        for (var x in panier){
-            panierString += index + ') ' + document.getElementById("aa" + x).innerHTML + " Qte: " + panier[x][0] + '</br>';
-            index++;
-        }
-
-        panierString += "<a href='boutiquecheckout' class='btn btn-primary'>Checkout</a>";
-        $('[data-toggle="popover"]').popover('dispose'); // Détruire le popover précédent avant de le réinitialiser
-        document.getElementById('panier').setAttribute('data-content', panierString); 
-        $('[data-toggle="popover"]').popover(); // Afficher le popover
-    }
-
-    // Afficher les produits du panier au démarrage
-    AfficherList(panier);
-</script>
-{% endblock %}
+</html>
