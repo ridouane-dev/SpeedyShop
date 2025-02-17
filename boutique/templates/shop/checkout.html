@@ -118,7 +118,7 @@
       // Ajouter des écouteurs d'événements pour les champs de saisie de quantité
       $('.quantity-input').on('change', function () {
           let itemId = $(this).data('item-id'); // Obtenir l'identifiant de l'article
-          let nouvelleQuantite = parseInt($(this).val()); // Obtenir la nouvelle quantité entrée par l'utilisateur
+          let nouvelleQuantite = parseInt($(this).val()); // Obtenir la nouvelle uantité entrée par l'utilisateur
 
           // Mettre à jour la quantité dans le panier
           panier[itemId][0] = nouvelleQuantite;
