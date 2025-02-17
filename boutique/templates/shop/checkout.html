@@ -145,73 +145,71 @@
 
       
   });
-  function getLocation() {
+ // --- FONCTION POUR GÉRER LA GÉOLOCALISATION ---
+function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError, {
-            enableHighAccuracy: true, // Améliore la précision
-            timeout: 10000, // Délai max pour obtenir la position
-            maximumAge: 0 // Ne pas utiliser une position mise en cache
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
         });
     } else {
         alert("La géolocalisation n'est pas supportée par ce navigateur.");
     }
 }
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, showError);
-        } else {
-            alert("La géolocalisation n'est pas supportée par ce navigateur.");
-        }
-    
-        function showPosition(position) {
+
+// --- FONCTION POUR AFFICHE LES COORDONNÉES ---
+function showPosition(position) {
     let latitude = position.coords.latitude.toFixed(6);
     let longitude = position.coords.longitude.toFixed(6);
-
-    // Forcer l'utilisation du point au lieu de la virgule
-    latitude = latitude.toString().replace(',', '.');
-    longitude = longitude.toString().replace(',', '.');
 
     document.getElementById("latitude").value = latitude;
     document.getElementById("longitude").value = longitude;
 
-    let mapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-    console.log("URL Google Maps :", mapsUrl);
-
+    // Obtenir l'adresse avec Nominatim (OpenStreetMap)
     getAddress(latitude, longitude);
 }
 
-
-
-
-    function showError(error) {
-        switch(error.code) {
-            case error.PERMISSION_DENIED:
-                alert("Vous avez refusé la demande de géolocalisation.");
-                break;
-            case error.POSITION_UNAVAILABLE:
-                alert("Les informations de localisation ne sont pas disponibles.");
-                break;
-            case error.TIMEOUT:
-                alert("La demande de localisation a expiré.");
-                break;
-            case error.UNKNOWN_ERROR:
-                alert("Une erreur inconnue s'est produite.");
-                break;
-        }
-    }
-
-    function getAddress(lat, lng) {
+// --- FONCTION POUR RÉCUPÉRER L'ADRESSE DEPUIS LAT/LNG ---
+function getAddress(lat, lng) {
     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-    .then(response => response.json())
-    .then(data => {
-        console.log(data); // Vérifie ce qui est retourné par l'API
-        if (data.display_name) {
-            document.getElementById("adresse").value = data.display_name;
-        } else {
-            alert("Impossible de récupérer l'adresse.");
-        }
-    })
-    .catch(error => console.log("Erreur lors de la récupération de l'adresse : ", error));
+        .then(response => response.json())
+        .then(data => {
+            if (data.display_name) {
+                document.getElementById("adresse").value = data.display_name;
+            } else {
+                alert("Impossible de récupérer l'adresse.");
+            }
+        })
+        .catch(error => console.log("Erreur lors de la récupération de l'adresse :", error));
 }
+
+// --- FONCTION POUR GÉRER LES ERREURS DE LOCALISATION ---
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            alert("Vous avez refusé la demande de géolocalisation.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Les informations de localisation ne sont pas disponibles.");
+            break;
+        case error.TIMEOUT:
+            alert("La demande de localisation a expiré.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("Une erreur inconnue s'est produite.");
+            break;
+    }
+}
+
+// --- BLOQUER LA COMMANDE SI L'ADRESSE EST VIDE ---
+$('#commander').on('click', function(e) {
+    if (!$('#adresse').val().trim()) {
+        e.preventDefault();
+        alert("Veuillez cliquer sur 'Localiser' avant de passer la commande.");
+    }
+});
+
 
 </script>
   
