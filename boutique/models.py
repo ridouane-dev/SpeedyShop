@@ -36,20 +36,24 @@ class Commande(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # Association avec l'utilisateur
     items = models.CharField(max_length=300)
     total = models.CharField(max_length=200)
-    date_commande = models.DateTimeField(auto_now=True)
+    date_commande = models.DateTimeField(auto_now_add=True)
     latitude = models.FloatField(null=True, blank=True)  # Champ pour la latitude
     longitude = models.FloatField(null=True, blank=True)  # Champ pour la longitude
     adresse = models.CharField(max_length=255, null=True, blank=True)  # Adresse optionnelle
-    status_choices = [
-        ('Express', 'Normale'),
+    statu_choices = [
+        ('Normale 1000 FCFA', 'Normale 1000 FCFA'),
+        ('Express 1500 FCFA', 'Express 1500 FCFA'),
     ]
-    status = models.CharField(max_length=10, choices=status_choices, default='Normale')
+    statu = models.CharField(max_length=108, choices=statu_choices, default='Normale 1000 FCFA')
 
     class Meta:
         ordering = ['-date_commande']
 
     def __str__(self):
         return self.user.first_name if self.user else "Commande sans utilisateur"
+    
+    def __str__(self):
+        return f"Commande {self.id} - {self.user.username} - {self.total} €"
 
 
 

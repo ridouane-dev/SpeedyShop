@@ -5,8 +5,8 @@
     <!-- Title Section -->
     <div class="row">
         <div class="col-12 text-center mb-4">
-            <h2>Voici votre liste de produits</h2>
-            <h3>Veuillez saisir la quantité</h3>
+            <h2><strong>Voici votre liste de produits</strong></h2>
+            <h3><strong>Veuillez saisir la quantité</strong></h3>
         </div>
     </div>
 
@@ -38,10 +38,10 @@
 
                 <!-- Delivery Status -->
                 <div class="mb-3">
-                    <label for="status" class="form-label">Choisissez le type de livraison</label>
-                    <select id="status" name="status" class="form-select">
-                        <option value="En Attente">Normale</option>
-                        <option value="En Cours">Express</option>
+                    <label for="statu" class="form-label"><strong>Choisissez le type de livraison<</strong></label>
+                    <select id="statu" name="statu" class="form-select">
+                        <option value="Normale 1000 FCFA">Normale 1000 FCFA</option>
+                        <option value="Express 1500 FCFA">Express  1500 FCFA</option>
                     </select>
                 </div>
 
@@ -113,7 +113,7 @@
               <span class="badge badge-primary badge-pill">Total Qte: ${nombre}</span>
           </li>`;
       $('#item-list').append(itemNombre);
-      $('#total').val(total + " FCFA");
+      $('#total').val(total );
 
       // Ajouter des écouteurs d'événements pour les champs de saisie de quantité
       $('.quantity-input').on('change', function () {

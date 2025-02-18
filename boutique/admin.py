@@ -18,7 +18,7 @@ class AdmminProduct(admin.ModelAdmin):
 
 
 class AdminCommande(admin.ModelAdmin):
-    list_display = ('items','total','date_commande' ,'status', 'adresse')
+    list_display = ('items','total','date_commande' ,'statu', 'adresse')
 
 admin.site.register(Category,AdminCategorie)
 admin.site.register(Product,AdmminProduct)

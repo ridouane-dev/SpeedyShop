@@ -33,22 +33,63 @@ def checkout(request):
         latitude = request.POST.get('latitude')
         longitude = request.POST.get('longitude')
         adresse = request.POST.get('adresse')
-
-        # Créer la commande avec l'utilisateur connecté et sa localisation
+        statu = request.POST.get('statu')
+        
+        # Créer la commande
         com = Commande(
-            user=request.user,  # Associer la commande à l'utilisateur connecté
+            user=request.user,
             items=items, 
             total=total, 
             latitude=latitude if latitude else None, 
             longitude=longitude if longitude else None, 
-            adresse=adresse if adresse else None
+            adresse=adresse if adresse else None,
+            statu=statu if statu else 'Normale'
         )
         com.save()
+        
+        # Ajoute les frais de livraison
+        nouveau_total = ajouter_frais_livraison(com.id)
+        
+        # 🟢 Stocke dans la session
+        request.session['nouveau_total'] = nouveau_total
+        request.session['commande_id'] = com.id
 
-        return redirect('confirmation')  # Rediriger vers la page de confirmation
+        # ✅ Redirige vers la page de confirmation
+        return redirect('confirmation')
 
     return render(request, 'shop/checkout.html')
+    
+
+def ajouter_frais_livraison(commande_id):
+    try:
+        commande = Commande.objects.get(id=commande_id)
+        
+        # Vérifie le statut et ajoute les frais appropriés
+        if commande.statu == 'Normale 1000 FCFA':
+            commande.total = float(commande.total) + 1000
+        elif commande.statu == 'Express 1500 FCFA':
+            commande.total = float(commande.total) + 1500
+        
+        commande.save()
+        return f"Frais ajoutés avec succès. : {commande.total}"
+    
+    except Commande.DoesNotExist:
+        return "Commande introuvable."
+    except Exception as e:
+        return f"Erreur : {str(e)}"
+
 
 def confirmation(request):
+    derniere = Commande.objects.filter(user=request.user).order_by('-date_commande').first()
+    nouveau_total = request.session.pop('nouveau_total', None)
+    commande_id = request.session.pop('commande_id', None)
 
-    return render(request, 'shop/confirmation.html')
+    commande = None
+    if commande_id:
+        commande = Commande.objects.get(id=commande_id)
+
+    return render(request, 'shop/confirmation.html', {'derniere_commande': derniere,
+                                                      'commande': commande,
+                                                      'nouveau_total': nouveau_total})
+
+

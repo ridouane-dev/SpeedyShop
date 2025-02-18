@@ -45,11 +45,17 @@
         <h2 class="text-2xl font-semibold text-green-600">Commande Confirmée !</h2>
         <h3 class="text-lg font-medium text-gray-800 mt-2">Bonjour {{ user.first_name }}</h3>
         <p class="mt-4 text-gray-700">Merci pour votre achat chez <span class="font-bold">SpeedyShop</span> 🎉</p>
-        <p class="text-gray-600 mt-2">Votre numéro de commande : <span class="font-mono text-lg text-blue-500">#123456</span></p>
+        <h1 class="mb-4">Votre Dernière Commande</h1>
 
-        <div class="mt-6 border-t pt-4">
-            <p class="text-gray-700">Un email de confirmation vous a été envoyé.</p>
-            <p class="text-gray-600">Nous vous informerons dès que votre commande sera expédiée.</p>
+        {% if derniere_commande %}
+          <p><strong>Date :</strong> {{ derniere_commande.date_commande|date:"d M Y H:i" }}</p>
+          <p><strong>Statut :</strong> {{ derniere_commande.statu }}</p>
+          <p><strong>Total (avec frais de livraison) :</strong> {{ nouveau_total }} FCFA</p>
+        {% else %}
+          <p>Vous n'avez pas encore passé de commande.</p>
+        {% endif %}
+            <p class="text-gray-700">Cliquer sur le boutton ci-dessous pour payer  </p>
+            <p class="text-gray-600">Nous vous enverrons un sms de confirmation dès que votre payement sera effectuer et la livraison enclancher.</p>
         </div>
 
         <!-- Buttons -->
@@ -57,7 +63,7 @@
             <a href="https://www.mynita-app.com/"
                 class="w-full md:w-auto inline-flex items-center bg-yellow-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition">
                 <img src="{% static 'images/nita.jpg' %}" alt="Logo Paiement" class="w-5 h-5 mr-2"> Payer maintenant
-                per NITA
+                par NITA
             </a>
             <a href="{% url 'home' %}"
                 class="w-full md:w-auto inline-flex items-center bg-orange-600 text-white px-6 py-2 rounded-lg shadow hover:bg-yellow-700 transition">
