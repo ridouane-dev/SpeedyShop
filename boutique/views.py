@@ -1,6 +1,9 @@
 from django.shortcuts import redirect, render
 from .models import Product , Commande
 from django.contrib.auth.decorators import login_required
+from datetime import timedelta
+from django.utils.timezone import now
+
 #from django.core.paginator import Paginator
 
 # Create your views here.
@@ -47,14 +50,22 @@ def checkout(request):
         )
         com.save()
         
-        # Ajoute les frais de livraison
-        nouveau_total = ajouter_frais_livraison(com.id)
+        # Vérifier si le compte a moins de 10 jours
+        date_creation_compte = request.user.date_joined
+        date_limite = date_creation_compte + timedelta(days=10)
+
+        if now() > date_limite:
+            # Appliquer les frais de livraison après 10 jours
+            nouveau_total = ajouter_frais_livraison(com.id)
+        else:
+            # Pas de frais de livraison dans les 10 premiers jours
+            nouveau_total = total
         
-        # 🟢 Stocke dans la session
+        #  Stocke dans la session
         request.session['nouveau_total'] = nouveau_total
         request.session['commande_id'] = com.id
 
-        # ✅ Redirige vers la page de confirmation
+        #  Redirige vers la page de confirmation
         return redirect('confirmation')
 
     return render(request, 'shop/checkout.html')
