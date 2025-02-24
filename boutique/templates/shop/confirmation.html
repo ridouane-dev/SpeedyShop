@@ -44,18 +44,19 @@
     <div class="bg-white p-8 rounded-lg shadow-lg max-w-md text-center bg-opacity-90 mt-20">
         <h2 class="text-2xl font-semibold text-green-600">Commande Confirmée !</h2>
         <h3 class="text-lg font-medium text-gray-800 mt-2">Bonjour {{ user.first_name }}</h3>
-        <p class="mt-4 text-gray-700">Merci pour votre achat chez <span class="font-bold">SpeedyShop</span> 🎉</p>
-        <h1 class="mb-4">Votre Dernière Commande</h1>
+        <p class="mt-4 text-gray-700">Merci pour votre achat chez <span class="font-bold">SpeedyShop</span> 🎉 </p>
+        <h1 class="mb-4">Voici votre facture </h1>
+        <h3 class="mb-4">vous pouvez payer la livraison tout de suite ou une fois livrer par NITA TRANSFERT  </h3>
 
         {% if derniere_commande %}
           <p><strong>Date :</strong> {{ derniere_commande.date_commande|date:"d M Y H:i" }}</p>
-          <p><strong>Statut :</strong> {{ derniere_commande.statu }}</p>
-          <p><strong>Total (avec frais de livraison) :</strong> {{ nouveau_total }} FCFA</p>
+          <p><strong>frais de livraison :</strong> {{ derniere_commande.statu }}</p>
+          <p><strong>Total  :</strong> {{ nouveau_total }} FCFA</p>
         {% else %}
           <p>Vous n'avez pas encore passé de commande.</p>
         {% endif %}
-            <p class="text-gray-700">Cliquer sur le boutton ci-dessous pour payer  </p>
-            <p class="text-gray-600">Nous vous enverrons un sms de confirmation dès que votre payement sera effectuer et la livraison enclancher.</p>
+            <p class="text-gray-700">Cliquer sur le boutton ci-dessous pour payer les frais de commande   </p>
+            <p class="text-gray-600">Nous vous enverrons un sms de confirmation dès que votre payement de vos produits sera effectuer et la livraison enclancher.</p>
         </div>
 
         <!-- Buttons -->

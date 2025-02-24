@@ -37,6 +37,8 @@ def checkout(request):
         longitude = request.POST.get('longitude')
         adresse = request.POST.get('adresse')
         statu = request.POST.get('statu')
+
+        
         
         # Créer la commande
         com = Commande(
@@ -50,27 +52,13 @@ def checkout(request):
         )
         com.save()
         
-        # Vérifier si le compte a moins de 10 jours
-        date_creation_compte = request.user.date_joined
-        date_limite = date_creation_compte + timedelta(days=10)
-
-        if now() > date_limite:
-            # Appliquer les frais de livraison après 10 jours
-            nouveau_total = ajouter_frais_livraison(com.id)
-        else:
-            # Pas de frais de livraison dans les 10 premiers jours
-            nouveau_total = total
-        
-        #  Stocke dans la session
-        request.session['nouveau_total'] = nouveau_total
-        request.session['commande_id'] = com.id
 
         #  Redirige vers la page de confirmation
         return redirect('confirmation')
 
     return render(request, 'shop/checkout.html')
     
-
+"""
 def ajouter_frais_livraison(commande_id):
     try:
         commande = Commande.objects.get(id=commande_id)
@@ -87,7 +75,7 @@ def ajouter_frais_livraison(commande_id):
     except Commande.DoesNotExist:
         return "Commande introuvable."
     except Exception as e:
-        return f"Erreur : {str(e)}"
+        return f"Erreur : {str(e)}"""
 
 
 def confirmation(request):
