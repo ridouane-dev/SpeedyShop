@@ -46,12 +46,12 @@
         <h3 class="text-lg font-medium text-gray-800 mt-2">Bonjour {{ user.first_name }}</h3>
         <p class="mt-4 text-gray-700">Merci pour votre achat chez <span class="font-bold">SpeedyShop</span> 🎉 </p>
         <h1 class="mb-4">Voici votre facture </h1>
-        <h3 class="mb-4">vous pouvez payer la livraison tout de suite ou une fois livrer par NITA TRANSFERT  </h3>
+        <h3 class="mb-4">vous pouvez payer les frais de livraison une fois que vous etes  livrer par NITA TRANSFERT  </h3>
 
         {% if derniere_commande %}
           <p><strong>Date :</strong> {{ derniere_commande.date_commande|date:"d M Y H:i" }}</p>
           <p><strong>frais de livraison :</strong> {{ derniere_commande.statu }}</p>
-          <p><strong>Total  :</strong> {{ nouveau_total }} FCFA</p>
+          <p><strong>frais de commande  :</strong> {{ derniere_commande.total }} FCFA</p>
         {% else %}
           <p>Vous n'avez pas encore passé de commande.</p>
         {% endif %}

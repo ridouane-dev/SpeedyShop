@@ -12,7 +12,8 @@ def index(request):
     return render (request , 'shop/index.html')
 
 """
-@login_required
+
+
 def index(request):
     Product_object = Product.objects.all()
     item_name= request.GET.get('item-name')
@@ -29,7 +30,7 @@ def index(request):
 
 
 
-
+@login_required
 def checkout(request):
     if request.method == 'POST':
         items = request.POST.get('items')
