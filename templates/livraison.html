@@ -241,9 +241,15 @@ video {
                 </div>
             </div>
         </div>
+        {% if user.is_authenticated %}
         <a href="{% url 'homeB' %}" class="btn btn-supermarche mt-4">
             🛒 Accéder au Supermarché
         </a>
+        {% else %}
+        <a href="register" class="btn btn-primary">S'inscrire</a>
+        <a href="login" class="btn btn-success">Se connecter</a>
+
+       {% endif %}
         
         
          
@@ -258,9 +264,7 @@ video {
 {% if user.is_authenticated %}
 
 <a href="logout" class="btn btn-danger">Se déconnecter</a>
-{% else %}
-<a href="register" class="btn btn-primary">S'inscrire</a>
-<a href="login" class="btn btn-success">Se connecter</a>
+
 
 {% endif %}
 
